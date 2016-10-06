@@ -21,7 +21,7 @@ public class MainClass {
         
         String ParamsFile;
         
-        ParamsFile = "src\\Labki\\labki.params";
+        ParamsFile = "src\\EGC\\EGC.params";
         
         //ParamsFile = new String[] {"-file","src\\Chars\\chars.params"};
         //ParamsFile = new String[] {"-file","src\\ecj\\ec\\app\\tutorial1\\tutorial1.params"};

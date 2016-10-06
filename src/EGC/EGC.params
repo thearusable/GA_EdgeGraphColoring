@@ -20,7 +20,7 @@ checkpoint              = false
 checkpoint-prefix       = ec
 checkpoint-modulo       = 1
 
-stat.file       = $src\\Labki\\Labki.stat
+stat.file       = $src\\EGC\\EGC.stat
 
 #POPULATION SECTION
 
@@ -48,6 +48,6 @@ select.tournament.size = 2
 
 #END POPULATION SECTION
 
-eval.problem = Labki.EdgeGraphColoringProblem
+eval.problem = EGC.EdgeGraphColoringProblem
 
 breed.elites.0 = 1

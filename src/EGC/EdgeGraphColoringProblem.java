@@ -17,19 +17,86 @@ import ec.simple.SimpleProblemForm;
 import ec.util.Parameter;
 import ec.vector.IntegerVectorIndividual;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import javafx.util.Pair;
 
 public class EdgeGraphColoringProblem extends Problem implements SimpleProblemForm {
     
     public int EDGES_NUMBER;
+    public int INDEX;
     public ArrayList<Integer> EDGES_START_POINTS;
     public ArrayList<Integer> EDGES_END_POINTS;
+    
+    Map<Integer, Pair<Integer,Integer>> EdgesData;
+    Map<Integer, List<Integer>> PointsData;
  
     @Override
     public void setup(EvolutionState state, Parameter base) {
         super.setup(state, base); //To change body of generated methods, choose Tools | Templates.
         
-        EDGES_NUMBER = 5;
+        //reading from file
+        
+        //GraphData index = edge number;
+        //left = startt point
+        //right = end point
+        EdgesData = new HashMap<>(); 
+        EdgesData.put(0, new Pair(0,1));
+        EdgesData.put(1, new Pair(0,2));
+        EdgesData.put(2, new Pair(0,3));
+        EdgesData.put(3, new Pair(1,3));
+        EdgesData.put(4, new Pair(3,2));
+        
+        //PoinstData 
+        //key - point index
+        //list - connected edges to point
+        PointsData = new HashMap<>();
+        PointsData.put(0, new ArrayList());
+        PointsData.get(0).add(0);
+        PointsData.get(0).add(1);
+        PointsData.get(0).add(2);
+        PointsData.put(1, new ArrayList());
+        PointsData.get(1).add(0);
+        PointsData.get(1).add(2);
+        PointsData.put(2, new ArrayList());
+        PointsData.get(2).add(1);
+        PointsData.get(2).add(4);
+        PointsData.put(3, new ArrayList());
+        PointsData.get(3).add(2);
+        PointsData.get(3).add(3);
+        
+        EDGES_NUMBER = EdgesData.size();
+        
+        //oblicznie indexu chromatycznego
+        ArrayList<Integer> temp = new ArrayList<>();
+        
+        for(int i = 0; i < EDGES_NUMBER; i++){
+            Pair<Integer,Integer> pair = EdgesData.get(i);
+            temp.add(pair.getKey());
+            temp.add(pair.getValue());
+        }
+
+        Collections.sort(temp);
+         
+        int max = 0;
+        int previous = temp.get(0);
+        for(int i = 0; i< temp.size(); i++){
+            if(temp.get(i) == previous) max += 1;
+            else{
+                previous = temp.get(i);
+                if(max > INDEX) INDEX = max;
+                max = 0;
+            }
+        }
+        
+        System.out.println("Index Chromatyczny: " + INDEX);
+        
         EDGES_START_POINTS = new ArrayList<>();
         EDGES_END_POINTS = new ArrayList<>();
         //1
@@ -47,6 +114,55 @@ public class EdgeGraphColoringProblem extends Problem implements SimpleProblemFo
         //5
         EDGES_START_POINTS.add(3);
         EDGES_END_POINTS.add(2);
+    }
+    
+        //Check is it ideal
+    private boolean isIdeal(IntegerVectorIndividual vector){
+        /*
+        PointsData.put(0, new ArrayList());
+        PointsData.get(0).add(0);
+        PointsData.get(0).add(1);
+        PointsData.get(0).add(2);
+        */
+        
+        //sprawdzenie czy genome jest długosci 5 
+        if(vector.genome.length < EDGES_NUMBER) return false;
+        
+        //sprawdzanie czy sie kolory nie powtarzaja przy danym wiercholku - do poprawy
+        List<Integer> temp = new ArrayList<>();
+        temp.clear();
+        
+        List<Integer> colors = new ArrayList<>();
+        
+        for(int i=0; i< PointsData.size(); i++){
+            colors.clear();
+            temp.clear();
+            
+            temp = PointsData.get(i);
+            for(int x=0; x < temp.size(); x++){
+                colors.add(vector.genome[temp.get(x)]);
+            }
+            
+            Set<Integer> unique_colors = new HashSet<>(colors);
+            
+            System.out.println("colors: " + colors.size() + "  uniq: " + unique_colors.size());
+            
+            if(unique_colors.size() != colors.size()){
+                return false;
+            }
+        }
+        
+        //sprawdzanie ilosci wykorzystanych kolorów - musi być <= INDEX
+        // NIBY DZIALA
+        List<Integer> colors2 = new ArrayList<>();
+        
+        for(int i = 0; i < vector.genome.length; i++){
+            colors2.add(vector.genome[i]);
+        }
+        
+        Set<Integer> all_colors = new HashSet<>(colors2);
+        
+        return all_colors.size() <= INDEX;
     }
     
     @Override
@@ -67,7 +183,7 @@ public class EdgeGraphColoringProblem extends Problem implements SimpleProblemFo
         
         IntegerVectorIndividual vector = (IntegerVectorIndividual) individual;
         
-        
+        /*
         
         for (int edge = 0; edge < vector.size(); edge++) {
             int color = vector.genome[edge];
@@ -98,12 +214,12 @@ public class EdgeGraphColoringProblem extends Problem implements SimpleProblemFo
         for(int i = 0; i < vector.size(); i++){
             colors.add(vector.genome[i]);
         }
-        if(colors.size() > 2){
+        if(colors.size() > INDEX){
             fitnessValue -= colors.size() - 2;
         }
-        
+        */
         //Check is it ideal
-        boolean isIdeal = isIdeal();
+        boolean isIdeal = isIdeal(vector);
         
         SimpleFitness fitness  = (SimpleFitness) vector.fitness;
         fitness.setFitness(evolutionState, fitnessValue, isIdeal);
@@ -112,11 +228,6 @@ public class EdgeGraphColoringProblem extends Problem implements SimpleProblemFo
 
     }
     
-    //Check is it ideal
-    private boolean isIdeal(){
-        
-        
-        return false;
-    }
+
     
 }

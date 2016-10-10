@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-/*To moja zmiana, ot co!*/ 
+/*To moja zmiana, ot co! */ 
 package Main;
 
 import ec.Evolve;

@@ -14,13 +14,13 @@ eval   = ec.simple.SimpleEvaluator
 stat   = ec.simple.SimpleStatistics
 exch   = ec.simple.SimpleExchanger
 
-generations             = 10
+generations             = 20
 quit-on-run-complete    = true
 checkpoint              = false
 checkpoint-prefix       = ec
 checkpoint-modulo       = 1
 
-stat.file       = $src\\EGC\\EGC.stat
+stat.file       = $Results.stat
 
 #POPULATION SECTION
 
@@ -35,7 +35,6 @@ pop.subpop.0.species.min-gene      = 0
 pop.subpop.0.species.ind           = ec.vector.IntegerVectorIndividual
 pop.subpop.0.species.fitness       = ec.simple.SimpleFitness
 
-pop.subpop.0.species.genome-size    = 5
 pop.subpop.0.species.crossover-type = one
 pop.subpop.0.species.mutation-type  = reset
 pop.subpop.0.species.mutation-prob  = 0.05
@@ -52,3 +51,7 @@ select.tournament.size = 2
 eval.problem = EGC.EdgeGraphColoringProblem
 
 breed.elites.0 = 1
+
+
+#this line will be changed acording to data.txt file
+pop.subpop.0.species.genome-size    = 3

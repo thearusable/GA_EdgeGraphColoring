@@ -18,7 +18,6 @@ import ec.util.Parameter;
 import ec.vector.IntegerVectorIndividual;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -26,7 +25,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import javafx.util.Pair;
-//Moje pakiety
 import java.io.File;
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -37,16 +35,30 @@ public class EdgeGraphColoringProblem extends Problem implements SimpleProblemFo
     
     public int EDGES_NUMBER;
     public int INDEX;
-    public ArrayList<Integer> EDGES_START_POINTS;
-    public ArrayList<Integer> EDGES_END_POINTS;
     
+    //EdgesData index = edge number;
+    //Pair = connected points 
     Map<Integer, Pair<Integer,Integer>> EdgesData;
+    
+    //PoinstData index = point 
+    //list - connected edges to point
     Map<Integer, List<Integer>> PointsData;
+    
+    public final static String GetDataFilePath()
+    {
+        String DataFile = "Data.txt";
+        
+        File f = new File(DataFile);
+        if(!f.exists() || f.isDirectory()) { 
+            DataFile = "src" + File.separator + "EGC" + File.separator + DataFile;
+        }
+        return DataFile;
+    }   
     
  //Moja metoda
     public void loadData() {
-        File dane;
-        dane = new File("src/dane.txt");
+        File dane = new File(GetDataFilePath());
+        
         BufferedReader reader = null;
         EdgesData = new HashMap<>(); 
         PointsData = new HashMap<>();
@@ -64,23 +76,23 @@ public class EdgeGraphColoringProblem extends Problem implements SimpleProblemFo
                     Integer edgeNumber = Integer.parseInt(dataArray[0]);
                     Integer sourceNumber = Integer.parseInt(dataArray[1]);
                     Integer destinationNumber = Integer.parseInt(dataArray[2]);
-                   // System.out.println("Numer kr: " + edgeNumber + " source: " + sourceNumber + " destination: " + destinationNumber);
+                    //System.out.println("Numer kr: " + edgeNumber + " source: " + sourceNumber + " destination: " + destinationNumber);
                    // System.out.println("EdgesData.put(" + edgeNumber + ", new Pair(" + sourceNumber + "," + destinationNumber + "))");
                     EdgesData.put(edgeNumber, new Pair(sourceNumber, destinationNumber));
                    // System.out.println(PointsData.containsKey(0));
                     //System.out.println(PointsData.containsKey(5));
                     if(!PointsData.containsKey(sourceNumber)) {
-                        System.out.println("PointsData.put(" + sourceNumber + ", new ArrayList());");
+                        //System.out.println("PointsData.put(" + sourceNumber + ", new ArrayList());");
                         PointsData.put(sourceNumber, new ArrayList());
                     }
                     if(!PointsData.containsKey(destinationNumber)) {
-                        System.out.println("PointsData.put(" + destinationNumber + ", new ArrayList());");
+                        //System.out.println("PointsData.put(" + destinationNumber + ", new ArrayList());");
                         PointsData.put(destinationNumber, new ArrayList());
                     }
                     PointsData.get(sourceNumber).add(edgeNumber);
                     PointsData.get(destinationNumber).add(edgeNumber);
-                    System.out.println("PointsData.get(" + sourceNumber + ").add(" + edgeNumber + ")");
-                    System.out.println("PointsData.get(" + destinationNumber + ").add(" + edgeNumber + ")");
+                    //System.out.println("PointsData.get(" + sourceNumber + ").add(" + edgeNumber + ")");
+                    //System.out.println("PointsData.get(" + destinationNumber + ").add(" + edgeNumber + ")");
                 }
             }
         } 
@@ -98,40 +110,10 @@ public class EdgeGraphColoringProblem extends Problem implements SimpleProblemFo
         super.setup(state, base); //To change body of generated methods, choose Tools | Templates.
         
         //reading from file
+        //algorytm zawsze wczytuje wszystkie linie, ignoruje liczbe krawedzi u gory
         loadData();
-        //GraphData index = edge number;
-        //left = startt point
-        //right = end point
-        
-        //---------------------------------------
-        /*EdgesData = new HashMap<>(); 
-        EdgesData.put(0, new Pair(0,1));
-        EdgesData.put(1, new Pair(0,2));
-        EdgesData.put(2, new Pair(0,3));
-        EdgesData.put(3, new Pair(1,3));
-        EdgesData.put(4, new Pair(3,2));*/
-        //---------------------------------------
-        
-        //PoinstData 
-        //key - point index
-        //list - connected edges to point
-        /*
-         PointsData.put(0, new ArrayList());
-        PointsData.get(0).add(0);
-        PointsData.get(0).add(1);
-        PointsData.get(0).add(2);
-        PointsData.put(1, new ArrayList());
-        PointsData.get(1).add(0);
-        PointsData.get(1).add(2);
-        PointsData.put(2, new ArrayList());
-        PointsData.get(2).add(1);
-        PointsData.get(2).add(4);
-        PointsData.put(3, new ArrayList());
-        PointsData.get(3).add(2);
-        PointsData.get(3).add(3);
-        */
        
-        
+       
         EDGES_NUMBER = EdgesData.size();
         
         //oblicznie indexu chromatycznego
@@ -158,23 +140,6 @@ public class EdgeGraphColoringProblem extends Problem implements SimpleProblemFo
         
         System.out.println("Index Chromatyczny: " + INDEX);
         
-        EDGES_START_POINTS = new ArrayList<>();
-        EDGES_END_POINTS = new ArrayList<>();
-        //1
-        EDGES_START_POINTS.add(0);
-        EDGES_END_POINTS.add(1);
-        //2
-        EDGES_START_POINTS.add(0);
-        EDGES_END_POINTS.add(2);
-        //3
-        EDGES_START_POINTS.add(0);
-        EDGES_END_POINTS.add(3);
-        //4
-        EDGES_START_POINTS.add(1);
-        EDGES_END_POINTS.add(3);
-        //5
-        EDGES_START_POINTS.add(3);
-        EDGES_END_POINTS.add(2);
     }
     
         //Check is it ideal
@@ -187,7 +152,7 @@ public class EdgeGraphColoringProblem extends Problem implements SimpleProblemFo
         */
         
         //sprawdzenie czy genome jest długosci 5 
-        if(vector.genome.length < EDGES_NUMBER) return false;
+        if(vector.genome.length != EDGES_NUMBER) return false;
         
         //sprawdzanie czy sie kolory nie powtarzaja przy danym wiercholku - do poprawy
         List<Integer> temp = new ArrayList<>();
@@ -206,7 +171,7 @@ public class EdgeGraphColoringProblem extends Problem implements SimpleProblemFo
             
             Set<Integer> unique_colors = new HashSet<>(colors);
             
-            System.out.println("colors: " + colors.size() + "  uniq: " + unique_colors.size());
+            //System.out.println("colors: " + colors.size() + "  uniq: " + unique_colors.size());
             
             if(unique_colors.size() != colors.size()){
                 return false;
@@ -223,6 +188,8 @@ public class EdgeGraphColoringProblem extends Problem implements SimpleProblemFo
         
         Set<Integer> all_colors = new HashSet<>(colors2);
         
+        System.out.println("isIdeal: " + (all_colors.size() <= INDEX));
+        
         return all_colors.size() <= INDEX;
     }
     
@@ -237,11 +204,8 @@ public class EdgeGraphColoringProblem extends Problem implements SimpleProblemFo
         if (!(individual instanceof IntegerVectorIndividual))
             evolutionState.output.fatal("It's not a IntegerVectorIndividual!!!",null);
 
-        
-        
         int fitnessValue = 0;
 
-        
         IntegerVectorIndividual vector = (IntegerVectorIndividual) individual;
         
         /*

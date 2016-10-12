@@ -6,8 +6,17 @@
 
 package Main;
 
+import EGC.EdgeGraphColoringProblem;
+import static EGC.EdgeGraphColoringProblem.GetDataFilePath;
 import ec.Evolve;
-//import EGC.EdgeGraphColoringProblem;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.RandomAccessFile;
+import java.util.Arrays;
 
 /**
  *
@@ -18,30 +27,57 @@ public class MainClass {
      * @param args the command line arguments
      */
     
-    public static void main(String[] args) {
+    public static void main(String[] args) throws FileNotFoundException, IOException {
         // TODO code application logic here
         
-        String ParamsFile;
-       // EdgeGraphColoringProblem clas;
+        String ParamsFile = "EGC.params";
         
-        ParamsFile = "src\\EGC\\EGC.params";
-       // clas = new EdgeGraphColoringProblem();
-       // clas.check();
-        //ParamsFile = new String[] {"-file","src\\Chars\\chars.params"};
-        //ParamsFile = new String[] {"-file","src\\ecj\\ec\\app\\tutorial1\\tutorial1.params"};
-        //ParamsFile = new String[] {"-file","src\\ecj\\ec\\app\\tutorial2\\tutorial2.params"};
-        //ParamsFile = "src\\ecj\\ec\\app\\tutorial3\\tutorial3.params";
-        //ParamsFile = "src\\ecj\\ec\\app\\tutorial4\\tutorial4.params";
-        //broken ?  ParamsFile = new String[] {"-file","src\\ecj\\ec\\app\\ordertree\\ordertree.params"};
-        //ParamsFile = "src\\ecj\\ec\\app\\gui\\coevolve2.params";
-        //ParamsFile = new String[] {"-file","src\\ecj\\ec\\app\\mona\\mona.params"};
-        //stuck?    
-        //ParamsFile = "src\\ecj\\ec\\app\\royaltree\\royaltree.params";
-        ///ParamsFile = new String[] {"-file","src\\ecj\\ec\\gp\\push\\push.params"};
+        File file = new File(ParamsFile);
+        if(!file.exists() || file.isDirectory()) { 
+            ParamsFile = "src" + File.separator + "EGC" + File.separator + "EGC.params";
+        }
         
+
+        //Delete last line in file
+        try (RandomAccessFile f = new RandomAccessFile(ParamsFile, "rw")) {
+            long length = f.length() - 1;
+            byte b;
+            do {
+                length -= 1;
+                f.seek(length);
+                b = f.readByte();
+            } while(b != 10 && length>0);
+            f.setLength(length+1);
+        }
         
-        //file = new String[] {"-file","test\\ec\\app\\tutorial4\\tutorial4.params"};
+        String ToAdd = "pop.subpop.0.species.genome-size    = ";
         
+        try {
+            File dane = new File(EdgeGraphColoringProblem.GetDataFilePath());
+            BufferedReader reader = null;
+            reader = new BufferedReader(new FileReader(dane));
+            String text = null;
+            while ((text = reader.readLine()) != null) {
+                String[] dataArray = text.split(" ");
+                if(dataArray.length == 1)
+                    ToAdd += text;
+                break;
+            }       
+        }catch (FileNotFoundException e) {
+                e.printStackTrace();
+        }
+        
+        //Adding to file
+        try {
+            FileWriter fw = new FileWriter(ParamsFile,true); //the true will append the new data
+            fw.write(ToAdd + "\n");//appends the string to the file
+            fw.close();
+        }catch(IOException ioe)
+        {
+            System.err.println("IOException: " + ioe.getMessage());
+        }
+
+        //Run Algorithm
         String[] Params = {"-file",ParamsFile}; 
         Evolve.main(Params);
         

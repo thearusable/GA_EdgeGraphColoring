@@ -3,9 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+
 package Main;
 
 import ec.Evolve;
+//import EGC.EdgeGraphColoringProblem;
 
 /**
  *
@@ -20,9 +22,11 @@ public class MainClass {
         // TODO code application logic here
         
         String ParamsFile;
+       // EdgeGraphColoringProblem clas;
         
         ParamsFile = "src\\EGC\\EGC.params";
-        
+       // clas = new EdgeGraphColoringProblem();
+       // clas.check();
         //ParamsFile = new String[] {"-file","src\\Chars\\chars.params"};
         //ParamsFile = new String[] {"-file","src\\ecj\\ec\\app\\tutorial1\\tutorial1.params"};
         //ParamsFile = new String[] {"-file","src\\ecj\\ec\\app\\tutorial2\\tutorial2.params"};

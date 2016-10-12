@@ -26,6 +26,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import javafx.util.Pair;
+//Moje pakiety
+import java.io.File;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 
 public class EdgeGraphColoringProblem extends Problem implements SimpleProblemForm {
     
@@ -36,28 +42,81 @@ public class EdgeGraphColoringProblem extends Problem implements SimpleProblemFo
     
     Map<Integer, Pair<Integer,Integer>> EdgesData;
     Map<Integer, List<Integer>> PointsData;
- 
+    
+ //Moja metoda
+    public void loadData() {
+        File dane;
+        dane = new File("src/dane.txt");
+        BufferedReader reader = null;
+        EdgesData = new HashMap<>(); 
+        PointsData = new HashMap<>();
+      
+        try {
+            reader = new BufferedReader(new FileReader(dane));
+            String text = null;
+            while ((text = reader.readLine()) != null) {
+                //text = text.replaceAll("\\s+","");
+                String[] dataArray = text.split(" ");
+                System.out.println(Arrays.toString(dataArray));
+                if(dataArray.length == 1)
+                    System.out.println("Liczba krawędzi: " + text);
+                else {
+                    Integer edgeNumber = Integer.parseInt(dataArray[0]);
+                    Integer sourceNumber = Integer.parseInt(dataArray[1]);
+                    Integer destinationNumber = Integer.parseInt(dataArray[2]);
+                   // System.out.println("Numer kr: " + edgeNumber + " source: " + sourceNumber + " destination: " + destinationNumber);
+                   // System.out.println("EdgesData.put(" + edgeNumber + ", new Pair(" + sourceNumber + "," + destinationNumber + "))");
+                    EdgesData.put(edgeNumber, new Pair(sourceNumber, destinationNumber));
+                   // System.out.println(PointsData.containsKey(0));
+                    //System.out.println(PointsData.containsKey(5));
+                    if(!PointsData.containsKey(sourceNumber)) {
+                        System.out.println("PointsData.put(" + sourceNumber + ", new ArrayList());");
+                        PointsData.put(sourceNumber, new ArrayList());
+                    }
+                    if(!PointsData.containsKey(destinationNumber)) {
+                        System.out.println("PointsData.put(" + destinationNumber + ", new ArrayList());");
+                        PointsData.put(destinationNumber, new ArrayList());
+                    }
+                    PointsData.get(sourceNumber).add(edgeNumber);
+                    PointsData.get(destinationNumber).add(edgeNumber);
+                    System.out.println("PointsData.get(" + sourceNumber + ").add(" + edgeNumber + ")");
+                    System.out.println("PointsData.get(" + destinationNumber + ").add(" + edgeNumber + ")");
+                }
+            }
+        } 
+        catch (FileNotFoundException e) {
+                e.printStackTrace();
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    //-------------------------------------
+    
     @Override
     public void setup(EvolutionState state, Parameter base) {
         super.setup(state, base); //To change body of generated methods, choose Tools | Templates.
         
         //reading from file
-        
+        loadData();
         //GraphData index = edge number;
         //left = startt point
         //right = end point
-        EdgesData = new HashMap<>(); 
+        
+        //---------------------------------------
+        /*EdgesData = new HashMap<>(); 
         EdgesData.put(0, new Pair(0,1));
         EdgesData.put(1, new Pair(0,2));
         EdgesData.put(2, new Pair(0,3));
         EdgesData.put(3, new Pair(1,3));
-        EdgesData.put(4, new Pair(3,2));
+        EdgesData.put(4, new Pair(3,2));*/
+        //---------------------------------------
         
         //PoinstData 
         //key - point index
         //list - connected edges to point
-        PointsData = new HashMap<>();
-        PointsData.put(0, new ArrayList());
+        /*
+         PointsData.put(0, new ArrayList());
         PointsData.get(0).add(0);
         PointsData.get(0).add(1);
         PointsData.get(0).add(2);
@@ -70,6 +129,8 @@ public class EdgeGraphColoringProblem extends Problem implements SimpleProblemFo
         PointsData.put(3, new ArrayList());
         PointsData.get(3).add(2);
         PointsData.get(3).add(3);
+        */
+       
         
         EDGES_NUMBER = EdgesData.size();
         

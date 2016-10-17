@@ -45,8 +45,7 @@ public class EdgeGraphColoringProblem extends Problem implements SimpleProblemFo
     
  //Moja metoda
     public void loadData() {
-        File dane;
-        dane = new File("src/dane.txt");
+        File dane = new File("src/dane.txt");
         BufferedReader reader = null;
         EdgesData = new HashMap<>(); 
         PointsData = new HashMap<>();

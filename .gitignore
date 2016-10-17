@@ -3,5 +3,6 @@ build/
 nbbuild/
 dist/
 nbdist/
+ecj_docs/
 .nb-gradle/
-src/EGC/EGC.stat
+*.stat

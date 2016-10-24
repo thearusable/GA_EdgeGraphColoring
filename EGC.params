@@ -54,4 +54,4 @@ breed.elites.0 = 1
 
 
 #this line will be changed acording to data.txt file
-pop.subpop.0.species.genome-size    = 
+pop.subpop.0.species.genome-size    = 3

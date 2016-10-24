@@ -45,19 +45,9 @@ public class MainClass {
         
         String ToAdd = "pop.subpop.0.species.genome-size    = ";
         
-        try {
-            File dane = new File(EdgeGraphColoringProblem.GetDataFilePath());
-            BufferedReader reader = null;
-            reader = new BufferedReader(new FileReader(dane));
-            String text = null;
-            while ((text = reader.readLine()) != null) {
-                String[] dataArray = text.split(" ");
-                if(dataArray.length == 1)
-                    ToAdd += text;
-                break;
-            }       
-        }catch (FileNotFoundException e) {
-        }
+        ToAdd += EdgeGraphColoringProblem.GetEdgesNumber();
+        
+        System.out.println("ToAdd: " + ToAdd);
         
         //Adding to file
         try {

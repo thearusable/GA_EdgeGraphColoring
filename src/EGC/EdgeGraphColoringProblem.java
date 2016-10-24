@@ -30,6 +30,8 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class EdgeGraphColoringProblem extends Problem implements SimpleProblemForm {
     
@@ -54,10 +56,36 @@ public class EdgeGraphColoringProblem extends Problem implements SimpleProblemFo
         }
         */
         return DataFile;
-    }   
+    }
     
- //Moja metoda
-    public String removeSpaces(String text) {
+    public final static String GetEdgesNumber() throws IOException{
+        File dane = new File(GetDataFilePath());
+        
+        BufferedReader reader = null;
+        try {
+            reader = new BufferedReader(new FileReader(dane));
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(EdgeGraphColoringProblem.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        String text = null;
+        String[] dataArray = null;
+        
+        while ((text = reader.readLine()) != null) {
+                text = removeSpaces(text);
+                if(checkLine(text) == true) {
+                    dataArray = text.split(" ");
+                    if(dataArray.length == 1) {
+                        return text;
+                    }
+                }
+        }
+        
+        System.err.println("Nie mozna odczytac ile jest krawedzi.");
+        return "0";
+    }
+    
+
+    public final static String removeSpaces(String text) {
         char firstChar = text.charAt(0);
         while(firstChar == ' ') {
             text = text.substring(1);
@@ -66,13 +94,8 @@ public class EdgeGraphColoringProblem extends Problem implements SimpleProblemFo
         return text;
     }
     
-    public boolean checkLine(String textLine) {
-        if(textLine.charAt(0) == '#') {
-            return false;
-        }
-        else {
-           return true; 
-        }         
+    public final static boolean checkLine(String textLine) {
+        return textLine.charAt(0) != '#';         
    }
 
     public void loadData() {
@@ -96,7 +119,7 @@ public class EdgeGraphColoringProblem extends Problem implements SimpleProblemFo
                     dataArray = text.split(" ");
                     //System.out.println(Arrays.toString(dataArray));
                     if(dataArray.length == 1) {
-                        System.out.println("Liczba krawędzi: " + text);
+                        //System.out.println("Liczba krawędzi: " + text);
                         lineToReadCount = Integer.parseInt(text);
                     }   
                     else {
@@ -143,9 +166,7 @@ public class EdgeGraphColoringProblem extends Problem implements SimpleProblemFo
         super.setup(state, base); //To change body of generated methods, choose Tools | Templates.
         
         //reading from file
-        //algorytm zawsze wczytuje wszystkie linie, ignoruje liczbe krawedzi u gory
         loadData();
-       
        
         EDGES_NUMBER = EdgesData.size();
         
@@ -178,12 +199,6 @@ public class EdgeGraphColoringProblem extends Problem implements SimpleProblemFo
     
         //Check is it ideal
     private boolean isIdeal(IntegerVectorIndividual vector){
-        /*
-        PointsData.put(0, new ArrayList());
-        PointsData.get(0).add(0);
-        PointsData.get(0).add(1);
-        PointsData.get(0).add(2);
-        */
         
         //sprawdzenie czy genome jest odpowiedniej długości
         if(vector.genome.length != EDGES_NUMBER) return false;
@@ -204,16 +219,12 @@ public class EdgeGraphColoringProblem extends Problem implements SimpleProblemFo
             }
             
             Set<Integer> unique_colors = new HashSet<>(colors);
-            
-            //System.out.println("colors: " + colors.size() + "  uniq: " + unique_colors.size());
-            
             if(unique_colors.size() != colors.size()){
                 return false;
             }
         }
         
         //sprawdzanie ilosci wykorzystanych kolorów - musi być <= INDEX
-        // NIBY DZIALA
         List<Integer> colors2 = new ArrayList<>();
         
         for(int i = 0; i < vector.genome.length; i++){
@@ -221,9 +232,6 @@ public class EdgeGraphColoringProblem extends Problem implements SimpleProblemFo
         }
         
         Set<Integer> all_colors = new HashSet<>(colors2);
-        
-        System.out.println("isIdeal: " + (all_colors.size() <= INDEX));
-        
         return all_colors.size() <= INDEX;
     }
     

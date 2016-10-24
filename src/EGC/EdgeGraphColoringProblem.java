@@ -170,7 +170,7 @@ public class EdgeGraphColoringProblem extends Problem implements SimpleProblemFo
        
         EDGES_NUMBER = EdgesData.size();
         
-        //oblicznie indexu chromatycznego
+        //oblicznie indexu chromatycznego - powinno byc 6 a nie 5 
         ArrayList<Integer> temp = new ArrayList<>();
         
         for(int i = 0; i < EDGES_NUMBER; i++){
@@ -204,16 +204,14 @@ public class EdgeGraphColoringProblem extends Problem implements SimpleProblemFo
         if(vector.genome.length != EDGES_NUMBER) return false;
         
         //sprawdzanie czy sie kolory nie powtarzaja przy danym wiercholku - do poprawy
-        List<Integer> temp = new ArrayList<>();
-        temp.clear();
-        
+        List<Integer> temp = new ArrayList<>();        
         List<Integer> colors = new ArrayList<>();
         
         for(int i=0; i< PointsData.size(); i++){
             colors.clear();
             temp.clear();
             
-            temp = PointsData.get(i);
+            temp = PointsData.getOrDefault(i, colors);
             for(int x=0; x < temp.size(); x++){
                 colors.add(vector.genome[temp.get(x)]);
             }
@@ -275,16 +273,18 @@ public class EdgeGraphColoringProblem extends Problem implements SimpleProblemFo
                 }
             }
         }
+        */
         
         //kara za ilosc kolorow 
         HashSet<Integer> colors = new HashSet<>();
         for(int i = 0; i < vector.size(); i++){
             colors.add(vector.genome[i]);
         }
+        
         if(colors.size() > INDEX){
             fitnessValue -= colors.size() - 2;
         }
-        */
+        
         //Check is it ideal
         boolean isIdeal = isIdeal(vector);
         

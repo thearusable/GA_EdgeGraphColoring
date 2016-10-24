@@ -47,11 +47,12 @@ public class EdgeGraphColoringProblem extends Problem implements SimpleProblemFo
     public final static String GetDataFilePath()
     {
         String DataFile = "Data.txt";
-        
+        /*
         File f = new File(DataFile);
         if(!f.exists() || f.isDirectory()) { 
             DataFile = "src" + File.separator + "EGC" + File.separator + DataFile;
         }
+        */
         return DataFile;
     }   
     
@@ -138,6 +139,7 @@ public class EdgeGraphColoringProblem extends Problem implements SimpleProblemFo
             }
         }
         
+        System.out.println("Liczba Krawędzi: " + EDGES_NUMBER);
         System.out.println("Index Chromatyczny: " + INDEX);
         
     }
@@ -151,7 +153,7 @@ public class EdgeGraphColoringProblem extends Problem implements SimpleProblemFo
         PointsData.get(0).add(2);
         */
         
-        //sprawdzenie czy genome jest długosci 5 
+        //sprawdzenie czy genome jest odpowiedniej długości
         if(vector.genome.length != EDGES_NUMBER) return false;
         
         //sprawdzanie czy sie kolory nie powtarzaja przy danym wiercholku - do poprawy

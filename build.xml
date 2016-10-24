@@ -12,8 +12,8 @@
     <import file="nbproject/build-impl.xml"/>
 
 	<target name="-post-compile">
-    		<copy file="src/EGC/EGC.params" todir="${dist.dir}"/>
-		<copy file="src/EGC/Data.txt" todir="${dist.dir}"/>         
+    		<copy file="EGC.params" todir="${dist.dir}"/>
+		<copy file="Data.txt" todir="${dist.dir}"/>         
 	</target>
 
     <!--

@@ -7,7 +7,6 @@
 package Main;
 
 import EGC.EdgeGraphColoringProblem;
-import static EGC.EdgeGraphColoringProblem.GetDataFilePath;
 import ec.Evolve;
 import java.io.BufferedReader;
 import java.io.File;
@@ -16,7 +15,6 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.RandomAccessFile;
-import java.util.Arrays;
 
 /**
  *
@@ -25,18 +23,13 @@ import java.util.Arrays;
 public class MainClass {
      /**
      * @param args the command line arguments
+     * @throws java.io.FileNotFoundException
      */
     
     public static void main(String[] args) throws FileNotFoundException, IOException {
         // TODO code application logic here
         
         String ParamsFile = "EGC.params";
-        
-        File file = new File(ParamsFile);
-        if(!file.exists() || file.isDirectory()) { 
-            ParamsFile = "src" + File.separator + "EGC" + File.separator + "EGC.params";
-        }
-        
 
         //Delete last line in file
         try (RandomAccessFile f = new RandomAccessFile(ParamsFile, "rw")) {
@@ -64,7 +57,6 @@ public class MainClass {
                 break;
             }       
         }catch (FileNotFoundException e) {
-                e.printStackTrace();
         }
         
         //Adding to file

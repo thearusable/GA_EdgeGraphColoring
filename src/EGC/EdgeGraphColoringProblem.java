@@ -57,6 +57,24 @@ public class EdgeGraphColoringProblem extends Problem implements SimpleProblemFo
     }   
     
  //Moja metoda
+    public String removeSpaces(String text) {
+        char firstChar = text.charAt(0);
+        while(firstChar == ' ') {
+            text = text.substring(1);
+            firstChar = text.charAt(0);
+        }
+        return text;
+    }
+    
+    public boolean checkLine(String textLine) {
+        if(textLine.charAt(0) == '#') {
+            return false;
+        }
+        else {
+           return true; 
+        }         
+   }
+
     public void loadData() {
         File dane = new File(GetDataFilePath());
         
@@ -67,33 +85,47 @@ public class EdgeGraphColoringProblem extends Problem implements SimpleProblemFo
         try {
             reader = new BufferedReader(new FileReader(dane));
             String text = null;
+            String[] dataArray = null;
+            Integer lineToReadCount = null;
+            Integer counter = 0;
+
             while ((text = reader.readLine()) != null) {
                 //text = text.replaceAll("\\s+","");
-                String[] dataArray = text.split(" ");
-                System.out.println(Arrays.toString(dataArray));
-                if(dataArray.length == 1)
-                    System.out.println("Liczba krawędzi: " + text);
-                else {
-                    Integer edgeNumber = Integer.parseInt(dataArray[0]);
-                    Integer sourceNumber = Integer.parseInt(dataArray[1]);
-                    Integer destinationNumber = Integer.parseInt(dataArray[2]);
-                    //System.out.println("Numer kr: " + edgeNumber + " source: " + sourceNumber + " destination: " + destinationNumber);
-                   // System.out.println("EdgesData.put(" + edgeNumber + ", new Pair(" + sourceNumber + "," + destinationNumber + "))");
-                    EdgesData.put(edgeNumber, new Pair(sourceNumber, destinationNumber));
-                   // System.out.println(PointsData.containsKey(0));
-                    //System.out.println(PointsData.containsKey(5));
-                    if(!PointsData.containsKey(sourceNumber)) {
-                        //System.out.println("PointsData.put(" + sourceNumber + ", new ArrayList());");
-                        PointsData.put(sourceNumber, new ArrayList());
+                text = removeSpaces(text);
+                if(checkLine(text) == true) {
+                    dataArray = text.split(" ");
+                    //System.out.println(Arrays.toString(dataArray));
+                    if(dataArray.length == 1) {
+                        System.out.println("Liczba krawędzi: " + text);
+                        lineToReadCount = Integer.parseInt(text);
+                    }   
+                    else {
+                        Integer edgeNumber = Integer.parseInt(dataArray[0]);
+                        Integer sourceNumber = Integer.parseInt(dataArray[1]);
+                        Integer destinationNumber = Integer.parseInt(dataArray[2]);
+                        //System.out.println("Numer kr: " + edgeNumber + " source: " + sourceNumber + " destination: " + destinationNumber);
+                       // System.out.println("EdgesData.put(" + edgeNumber + ", new Pair(" + sourceNumber + "," + destinationNumber + "))");
+                        EdgesData.put(edgeNumber, new Pair(sourceNumber, destinationNumber));
+                       // System.out.println(PointsData.containsKey(0));
+                        //System.out.println(PointsData.containsKey(5));
+                        if(!PointsData.containsKey(sourceNumber)) {
+                            //System.out.println("PointsData.put(" + sourceNumber + ", new ArrayList());");
+                            PointsData.put(sourceNumber, new ArrayList());
+                        }
+                        if(!PointsData.containsKey(destinationNumber)) {
+                            //System.out.println("PointsData.put(" + destinationNumber + ", new ArrayList());");
+                            PointsData.put(destinationNumber, new ArrayList());
+                        }
+                        PointsData.get(sourceNumber).add(edgeNumber);
+                        PointsData.get(destinationNumber).add(edgeNumber);
+                        //System.out.println("PointsData.get(" + sourceNumber + ").add(" + edgeNumber + ")");
+                        //System.out.println("PointsData.get(" + destinationNumber + ").add(" + edgeNumber + ")");
+                        counter++;
+                        System.out.println(Arrays.toString(dataArray));
+                        
+                        if(counter == lineToReadCount)
+                            break;
                     }
-                    if(!PointsData.containsKey(destinationNumber)) {
-                        //System.out.println("PointsData.put(" + destinationNumber + ", new ArrayList());");
-                        PointsData.put(destinationNumber, new ArrayList());
-                    }
-                    PointsData.get(sourceNumber).add(edgeNumber);
-                    PointsData.get(destinationNumber).add(edgeNumber);
-                    //System.out.println("PointsData.get(" + sourceNumber + ").add(" + edgeNumber + ")");
-                    //System.out.println("PointsData.get(" + destinationNumber + ").add(" + edgeNumber + ")");
                 }
             }
         } 

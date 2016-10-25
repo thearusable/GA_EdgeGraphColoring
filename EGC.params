@@ -1,7 +1,7 @@
 verbosity    = 0
 
-breedthreads = 1
-evalthreads  = 1
+breedthreads = auto
+evalthreads  = auto
 seed.0       = time
 
 state  = ec.simple.SimpleEvolutionState
@@ -14,7 +14,7 @@ eval   = ec.simple.SimpleEvaluator
 stat   = ec.simple.SimpleStatistics
 exch   = ec.simple.SimpleExchanger
 
-generations             = 200
+generations             = 20000
 quit-on-run-complete    = true
 checkpoint              = false
 checkpoint-prefix       = ec
@@ -27,10 +27,10 @@ stat.file       = $Results.stat
 pop.subpops     = 1
 pop.subpop.0    = ec.Subpopulation
 
-pop.subpop.0.size                  = 100
+pop.subpop.0.size                  = 250
 pop.subpop.0.duplicate-retries     = 0
 pop.subpop.0.species               = ec.vector.IntegerVectorSpecies
-pop.subpop.0.species.max-gene      = 20
+pop.subpop.0.species.max-gene      = 15
 pop.subpop.0.species.min-gene      = 0
 pop.subpop.0.species.ind           = ec.vector.IntegerVectorIndividual
 pop.subpop.0.species.fitness       = ec.simple.SimpleFitness
@@ -54,4 +54,4 @@ breed.elites.0 = 1
 
 
 #this line will be changed acording to data.txt file
-pop.subpop.0.species.genome-size    = 21
+pop.subpop.0.species.genome-size    = 55

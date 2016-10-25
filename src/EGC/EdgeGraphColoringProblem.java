@@ -173,8 +173,8 @@ public class EdgeGraphColoringProblem extends Problem implements SimpleProblemFo
         //oblicznie indexu chromatycznego - powinno byc 6 a nie 5 
         ArrayList<Integer> temp = new ArrayList<>();
         
-        for(int i = 0; i < EDGES_NUMBER; i++){
-            Pair<Integer,Integer> pair = EdgesData.get(i);
+        for (Map.Entry<Integer, Pair<Integer,Integer>> entry: EdgesData.entrySet()){
+            Pair<Integer,Integer> pair = entry.getValue();
             temp.add(pair.getKey());
             temp.add(pair.getValue());
         }

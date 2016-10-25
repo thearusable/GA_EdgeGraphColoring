@@ -14,7 +14,7 @@ eval   = ec.simple.SimpleEvaluator
 stat   = ec.simple.SimpleStatistics
 exch   = ec.simple.SimpleExchanger
 
-generations             = 20
+generations             = 200
 quit-on-run-complete    = true
 checkpoint              = false
 checkpoint-prefix       = ec
@@ -30,7 +30,7 @@ pop.subpop.0    = ec.Subpopulation
 pop.subpop.0.size                  = 100
 pop.subpop.0.duplicate-retries     = 0
 pop.subpop.0.species               = ec.vector.IntegerVectorSpecies
-pop.subpop.0.species.max-gene      = 9
+pop.subpop.0.species.max-gene      = 20
 pop.subpop.0.species.min-gene      = 0
 pop.subpop.0.species.ind           = ec.vector.IntegerVectorIndividual
 pop.subpop.0.species.fitness       = ec.simple.SimpleFitness

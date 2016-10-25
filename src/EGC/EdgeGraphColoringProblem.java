@@ -181,14 +181,14 @@ public class EdgeGraphColoringProblem extends Problem implements SimpleProblemFo
 
         Collections.sort(temp);
          
-        int max = 0;
+        int max = 1;
         int previous = temp.get(0);
         for(int i = 0; i< temp.size(); i++){
             if(temp.get(i) == previous) max += 1;
             else{
                 previous = temp.get(i);
                 if(max > INDEX) INDEX = max;
-                max = 0;
+                max = 1;
             }
         }
         
@@ -203,7 +203,7 @@ public class EdgeGraphColoringProblem extends Problem implements SimpleProblemFo
         //sprawdzenie czy genome jest odpowiedniej długości
         if(vector.genome.length != EDGES_NUMBER) return false;
         
-        //sprawdzanie czy sie kolory nie powtarzaja przy danym wiercholku - do poprawy
+        //sprawdzanie czy sie kolory nie powtarzaja przy danym wiercholku
         List<Integer> temp = new ArrayList<>();        
         List<Integer> colors = new ArrayList<>();
         
@@ -222,7 +222,7 @@ public class EdgeGraphColoringProblem extends Problem implements SimpleProblemFo
             }
         }
         
-        //sprawdzanie ilosci wykorzystanych kolorów - musi być <= INDEX
+        //sprawdzanie ilosci wykorzystanych kolorów
         List<Integer> colors2 = new ArrayList<>();
         
         for(int i = 0; i < vector.genome.length; i++){
@@ -248,41 +248,37 @@ public class EdgeGraphColoringProblem extends Problem implements SimpleProblemFo
 
         IntegerVectorIndividual vector = (IntegerVectorIndividual) individual;
         
-        /*
-        
-        for (int edge = 0; edge < vector.size(); edge++) {
-            int color = vector.genome[edge];
-            int vertex_start = EDGES_START_POINTS.get(edge);
-            int vertex_end = EDGES_END_POINTS.get(edge);
-            int color_start = vector.genome[vertex_start];
-            int color_end = vector.genome[vertex_end];
-            
-            for(int s = 0; s < EDGES_START_POINTS.size(); s++){
-                if(EDGES_START_POINTS.get(s) == vertex_start){
-                    if(color_start != color){
-                        fitnessValue += 1;
-                    }else fitnessValue -= 1;
-                }
-            }
+        //Zliczenie ilosci kolorow
+        List<Integer> all_colors = new ArrayList<>();
 
-            for(int s = 0; s < EDGES_END_POINTS.size(); s++){
-                if(EDGES_END_POINTS.get(s) == vertex_end){
-                    if(color_end != color){
-                        fitnessValue += 1;
-                    }else fitnessValue -= 1;
-                }
-            }
-        }
-        */
-        
-        //kara za ilosc kolorow 
-        HashSet<Integer> colors = new HashSet<>();
         for(int i = 0; i < vector.size(); i++){
-            colors.add(vector.genome[i]);
+            all_colors.add(vector.genome[i]);
         }
         
-        if(colors.size() > INDEX){
-            fitnessValue -= colors.size() - 2;
+        HashSet<Integer> all_unique_colors = new HashSet<>(all_colors);
+        
+        if(all_unique_colors.size() > INDEX){
+            fitnessValue -= all_unique_colors.size() - INDEX;
+        }else{
+            fitnessValue += 2;
+        }
+        
+        //Ocena
+        for (Map.Entry<Integer, List<Integer>> entry: PointsData.entrySet()){
+            List<Integer> edges = entry.getValue();
+            List<Integer> used_colors = new ArrayList<>();
+            
+            for(int i = 0; i < edges.size(); i++){
+                used_colors.add(vector.genome[edges.get(i)]);
+            }
+            
+            Set<Integer> unique_colors = new HashSet<>(used_colors);
+            
+            if(used_colors.size() == unique_colors.size()){
+                fitnessValue += 1;
+            }else {
+                fitnessValue -= 1;
+            }
         }
         
         //Check is it ideal
@@ -294,7 +290,4 @@ public class EdgeGraphColoringProblem extends Problem implements SimpleProblemFo
         vector.evaluated = true;
 
     }
-    
-
-    
 }

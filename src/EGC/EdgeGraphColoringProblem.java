@@ -172,43 +172,7 @@ public class EdgeGraphColoringProblem extends Problem implements SimpleProblemFo
         System.out.println("Index Chromatyczny: " + INDEX);
         
     }
-    
-    //Funkcja sprawdzajaca czy kolorowanie jest prawidlowe
-    private boolean isIdeal(IntegerVectorIndividual vector){
-        
-        //sprawdzenie czy genome jest odpowiedniej długości
-        if(vector.genome.length != EDGES_NUMBER) return false;
 
-        int goodPoints = 0;
-        
-        for (Map.Entry<Integer, List<Integer>> entry: PointsData.entrySet()){
-            List<Integer> edges = entry.getValue();
-            List<Integer> used_colors = new ArrayList<>();
-            
-            //pobranie kolorów dla krawedzi wychodzacych z danego wierzcholka
-            for(int i = 0; i < edges.size(); i++){
-                used_colors.add(vector.genome[edges.get(i)]);
-            }
-            
-            //tablica lista uunikalnych kolorów
-            Set<Integer> unique_colors = new HashSet<>(used_colors);
-            
-            //Ocena        
-            if(used_colors.size() == unique_colors.size()){
-                goodPoints += 1;
-            }else{
-                return false;
-            }
-        }
-        
-        if(goodPoints == PointsData.size()){
-            System.out.println("true");
-            return true;
-        }else{
-            return false;
-        }
-    }
-    
     @Override
     public void evaluate(final EvolutionState evolutionState, 
                                     final Individual individual, 
@@ -243,6 +207,8 @@ public class EdgeGraphColoringProblem extends Problem implements SimpleProblemFo
             fitnessValue -= INDEX - all_unique_colors.size();
         }
         
+        int goodPoints = 0;
+        
         //Ocena rozwiazania
         for (Map.Entry<Integer, List<Integer>> entry: PointsData.entrySet()){
             List<Integer> edges = entry.getValue();
@@ -256,31 +222,25 @@ public class EdgeGraphColoringProblem extends Problem implements SimpleProblemFo
             //tablica lista uunikalnych kolorów
             Set<Integer> unique_colors = new HashSet<>(used_colors);
             
-            fitnessValue += unique_colors.size();
-            
-            /*
-            if(used_colors.size() > unique_colors.size()){
-                fitnessValue -= used_colors.size() - unique_colors.size();
-            }
-            
-            fitnessValue += (float)(unique_colors.size()) / (float)(used_colors.size());
-            */
-            //Ocena
-            /*
+            //zlicza prawidłowo pokolorowane wierzchołki
             if(used_colors.size() == unique_colors.size()){
-                fitnessValue += used_colors.size() - unique_colors.size();//1;
-            }else {
-                //fitnessValue -= 1;
+                goodPoints += 1;
             }
-            */
-            //dodanie małej nagrody za dobre kolory
-            //fitnessValue += (float)(unique_colors.size()) / (float)(used_colors.size());
+            
+            //dodanie do oceny ilosc unikalnych kolorów
+            fitnessValue += unique_colors.size();
+
         }
         
-        //Sprawdzenie czy kolorowanie jest prawidlowe
-        boolean isIdeal = isIdeal(vector);// && fitnessValue == INDEX;
+        //Sprawdzenie czy osobnik jest prawidłowo pokolorowany
+        boolean isIdeal = false;
         
-        if(isIdeal) fitnessValue += 2;
+        if((goodPoints == PointsData.size()) && vector.genome.length == EDGES_NUMBER ){
+            isIdeal = true;
+            fitnessValue += 1;
+        }else{
+            isIdeal = false;
+        }
         
         //przekazanie oceny i zatrzymanie algorytmu jest isIdeal zwroci true
         SimpleFitness fitness  = (SimpleFitness) vector.fitness;

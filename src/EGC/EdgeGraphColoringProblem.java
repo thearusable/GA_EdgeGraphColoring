@@ -119,7 +119,6 @@ public class EdgeGraphColoringProblem extends Problem implements SimpleProblemFo
                         PointsData.get(sourceNumber).add(edgeNumber);
                         PointsData.get(destinationNumber).add(edgeNumber);
                         counter++;
-                        System.out.println(Arrays.toString(dataArray));
                         
                         if(counter == lineToReadCount)
                             break;
@@ -167,10 +166,6 @@ public class EdgeGraphColoringProblem extends Problem implements SimpleProblemFo
                 max = 1;
             }
         }
-        
-        System.out.println("Liczba Krawędzi: " + EDGES_NUMBER);
-        System.out.println("Index Chromatyczny: " + INDEX);
-        
     }
 
     @Override
@@ -237,7 +232,7 @@ public class EdgeGraphColoringProblem extends Problem implements SimpleProblemFo
         
         if((goodPoints == PointsData.size()) && vector.genome.length == EDGES_NUMBER ){
             isIdeal = true;
-            fitnessValue += 1;
+            fitnessValue += 5;
         }else{
             isIdeal = false;
         }

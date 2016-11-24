@@ -2,9 +2,12 @@
 verbosity    = 0
 
 #okresla ilosc wątków i startowe ziarno
-breedthreads = 1
-evalthreads  = 1
+breedthreads = auto
+evalthreads  = auto
 seed.0       = time
+seed.1       = time
+seed.2       = time
+seed.3       = time
 
 #określenie klas odpowiedzialnych za poszczególne lementy algorytmu
 state  = ec.simple.SimpleEvolutionState
@@ -18,7 +21,6 @@ exch   = ec.simple.SimpleExchanger
 
 #maksymalna liczba generacji
 generations             = 20000
-
 quit-on-run-complete    = true
 
 #wyłaczenie obsługi checkpointów
@@ -29,12 +31,12 @@ checkpoint-modulo       = 1
 #określenie pliku ze wynikami
 stat.file       = $Results.stat
 
-#określa ilość populacji - ile ich jest równolegle
+#określa ilość populacji
 pop.subpops     = 1
 pop.subpop.0    = ec.Subpopulation
 
-#rozmiar populacji - 250 x IntegerVectorIndividual
-pop.subpop.0.size                  = 250
+#rozmiar populacji
+pop.subpop.0.size                  = 100
 pop.subpop.0.duplicate-retries     = 0
 
 #określa klasę reprezentującą gatunek
@@ -51,8 +53,7 @@ pop.subpop.0.species.ind           = ec.vector.IntegerVectorIndividual
 pop.subpop.0.species.fitness       = ec.simple.SimpleFitness
 
 #określa typ krzyżowania
-pop.subpop.0.species.crossover-type = two
-pop.subpop.0.species.crossover-prob = 1.0
+pop.subpop.0.species.crossover-type = one
 
 #określa typ i częstotliwość mutacji
 pop.subpop.0.species.mutation-type  = reset
@@ -66,7 +67,7 @@ pop.subpop.0.species.pipe.source.0.source.0 = ec.select.TournamentSelection
 pop.subpop.0.species.pipe.source.0.source.1 = ec.select.TournamentSelection
 
 #określa ilość rywalizujących osobników
-select.tournament.size = 2
+select.tournament.size = 5
 
 #określa klasę problemu
 eval.problem = EGC.EdgeGraphColoringProblem
@@ -75,4 +76,4 @@ breed.elites.0 = 1
 
 
 #this line will be changed acording to data.txt file
-pop.subpop.0.species.genome-size    = 40
+pop.subpop.0.species.genome-size    = 55

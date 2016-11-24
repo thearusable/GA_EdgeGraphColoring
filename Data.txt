@@ -6,7 +6,7 @@
 # Dane
 # Krawedzie musza byc numerowane od zera
 #
-40
+55
 0 1 2
 1 1 4
 2 1 5

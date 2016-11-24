@@ -2,8 +2,8 @@
 verbosity    = 0
 
 #okresla ilosc wątków i startowe ziarno
-breedthreads = auto
-evalthreads  = auto
+breedthreads = 1
+evalthreads  = 1
 seed.0       = time
 
 #określenie klas odpowiedzialnych za poszczególne lementy algorytmu
@@ -51,7 +51,8 @@ pop.subpop.0.species.ind           = ec.vector.IntegerVectorIndividual
 pop.subpop.0.species.fitness       = ec.simple.SimpleFitness
 
 #określa typ krzyżowania
-pop.subpop.0.species.crossover-type = one
+pop.subpop.0.species.crossover-type = two
+pop.subpop.0.species.crossover-prob = 1.0
 
 #określa typ i częstotliwość mutacji
 pop.subpop.0.species.mutation-type  = reset
@@ -74,4 +75,4 @@ breed.elites.0 = 1
 
 
 #this line will be changed acording to data.txt file
-pop.subpop.0.species.genome-size    = 55
+pop.subpop.0.species.genome-size    = 40

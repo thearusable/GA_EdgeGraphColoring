@@ -178,35 +178,35 @@ public class EdgeGraphColoringProblem extends Problem implements SimpleProblemFo
         
         //sprawdzenie czy genome jest odpowiedniej długości
         if(vector.genome.length != EDGES_NUMBER) return false;
+
+        int goodPoints = 0;
         
-        //sprawdzanie czy kolory sie nie powtarzaja przy danym wiercholku
-        List<Integer> temp = new ArrayList<>();        
-        List<Integer> colors = new ArrayList<>();
-        
-        for(int i=0; i< PointsData.size(); i++){
-            colors.clear();
-            temp.clear();
+        for (Map.Entry<Integer, List<Integer>> entry: PointsData.entrySet()){
+            List<Integer> edges = entry.getValue();
+            List<Integer> used_colors = new ArrayList<>();
             
-            temp = PointsData.getOrDefault(i, colors);
-            for(int x=0; x < temp.size(); x++){
-                colors.add(vector.genome[temp.get(x)]);
+            //pobranie kolorów dla krawedzi wychodzacych z danego wierzcholka
+            for(int i = 0; i < edges.size(); i++){
+                used_colors.add(vector.genome[edges.get(i)]);
             }
             
-            Set<Integer> unique_colors = new HashSet<>(colors);
-            if(unique_colors.size() != colors.size()){
+            //tablica lista uunikalnych kolorów
+            Set<Integer> unique_colors = new HashSet<>(used_colors);
+            
+            //Ocena        
+            if(used_colors.size() == unique_colors.size()){
+                goodPoints += 1;
+            }else{
                 return false;
             }
         }
         
-        //sprawdzanie ilosci wykorzystanych kolorów
-        List<Integer> colors2 = new ArrayList<>();
-        
-        for(int i = 0; i < vector.genome.length; i++){
-            colors2.add(vector.genome[i]);
+        if(goodPoints == PointsData.size()){
+            System.out.println("true");
+            return true;
+        }else{
+            return false;
         }
-        
-        Set<Integer> all_colors = new HashSet<>(colors2);
-        return all_colors.size() <= INDEX;
     }
     
     @Override
@@ -222,7 +222,7 @@ public class EdgeGraphColoringProblem extends Problem implements SimpleProblemFo
             evolutionState.output.fatal("It's not a IntegerVectorIndividual!!!",null);
 
         //startowa ocena
-        int fitnessValue = 0;
+        double fitnessValue = 0.0;
 
         IntegerVectorIndividual vector = (IntegerVectorIndividual) individual;
         
@@ -235,11 +235,12 @@ public class EdgeGraphColoringProblem extends Problem implements SimpleProblemFo
         
         HashSet<Integer> all_unique_colors = new HashSet<>(all_colors);
         
+        //Karanie za złą ilość kolorów
         if(all_unique_colors.size() > INDEX){
             fitnessValue -= all_unique_colors.size() - INDEX;
         }
-        else{
-            fitnessValue += 2;
+        else if(all_unique_colors.size() < INDEX){
+            fitnessValue -= INDEX - all_unique_colors.size();
         }
         
         //Ocena rozwiazania
@@ -247,21 +248,39 @@ public class EdgeGraphColoringProblem extends Problem implements SimpleProblemFo
             List<Integer> edges = entry.getValue();
             List<Integer> used_colors = new ArrayList<>();
             
+            //pobranie kolorów dla krawedzi wychodzacych z danego wierzcholka
             for(int i = 0; i < edges.size(); i++){
                 used_colors.add(vector.genome[edges.get(i)]);
             }
             
+            //tablica lista uunikalnych kolorów
             Set<Integer> unique_colors = new HashSet<>(used_colors);
             
-            if(used_colors.size() == unique_colors.size()){
-                fitnessValue += 1;
-            }else {
-                fitnessValue -= 1;
+            fitnessValue += unique_colors.size();
+            
+            /*
+            if(used_colors.size() > unique_colors.size()){
+                fitnessValue -= used_colors.size() - unique_colors.size();
             }
+            
+            fitnessValue += (float)(unique_colors.size()) / (float)(used_colors.size());
+            */
+            //Ocena
+            /*
+            if(used_colors.size() == unique_colors.size()){
+                fitnessValue += used_colors.size() - unique_colors.size();//1;
+            }else {
+                //fitnessValue -= 1;
+            }
+            */
+            //dodanie małej nagrody za dobre kolory
+            //fitnessValue += (float)(unique_colors.size()) / (float)(used_colors.size());
         }
         
         //Sprawdzenie czy kolorowanie jest prawidlowe
-        boolean isIdeal = isIdeal(vector);
+        boolean isIdeal = isIdeal(vector);// && fitnessValue == INDEX;
+        
+        if(isIdeal) fitnessValue += 2;
         
         //przekazanie oceny i zatrzymanie algorytmu jest isIdeal zwroci true
         SimpleFitness fitness  = (SimpleFitness) vector.fitness;

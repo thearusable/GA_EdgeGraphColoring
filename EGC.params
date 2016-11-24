@@ -1,11 +1,13 @@
+#okresla jak duzo rzeczy ma byc wyswietlane w konsoli
 verbosity    = 0
 
+#okresla ilosc wątków i startowe ziarno
 breedthreads = auto
 evalthreads  = auto
 seed.0       = time
 
+#określenie klas odpowiedzialnych za poszczególne lementy algorytmu
 state  = ec.simple.SimpleEvolutionState
-
 pop    = ec.Population
 init   = ec.simple.SimpleInitializer
 finish = ec.simple.SimpleFinisher
@@ -14,40 +16,58 @@ eval   = ec.simple.SimpleEvaluator
 stat   = ec.simple.SimpleStatistics
 exch   = ec.simple.SimpleExchanger
 
+#maksymalna liczba generacji
 generations             = 20000
+
 quit-on-run-complete    = true
+
+#wyłaczenie obsługi checkpointów
 checkpoint              = false
 checkpoint-prefix       = ec
 checkpoint-modulo       = 1
 
+#określenie pliku ze wynikami
 stat.file       = $Results.stat
 
-#POPULATION SECTION
-
+#określa ilość populacji - ile ich jest równolegle
 pop.subpops     = 1
 pop.subpop.0    = ec.Subpopulation
 
+#rozmiar populacji - 250 x IntegerVectorIndividual
 pop.subpop.0.size                  = 250
 pop.subpop.0.duplicate-retries     = 0
+
+#określa klasę reprezentującą gatunek
 pop.subpop.0.species               = ec.vector.IntegerVectorSpecies
+
+#maksymalny Integer w genomie
 pop.subpop.0.species.max-gene      = 15
+
+#minimalny Integer w genomie
 pop.subpop.0.species.min-gene      = 0
+
+#określa klasę reprezentującą genom
 pop.subpop.0.species.ind           = ec.vector.IntegerVectorIndividual
 pop.subpop.0.species.fitness       = ec.simple.SimpleFitness
 
+#określa typ krzyżowania
 pop.subpop.0.species.crossover-type = one
+
+#określa typ i częstotliwość mutacji
 pop.subpop.0.species.mutation-type  = reset
 pop.subpop.0.species.mutation-prob  = 0.05
 
 pop.subpop.0.species.pipe           = ec.vector.breed.VectorMutationPipeline
 pop.subpop.0.species.pipe.source.0  = ec.vector.breed.VectorCrossoverPipeline
+
+#określa rodzaj selekcji
 pop.subpop.0.species.pipe.source.0.source.0 = ec.select.TournamentSelection
 pop.subpop.0.species.pipe.source.0.source.1 = ec.select.TournamentSelection
 
+#określa ilość rywalizujących osobników
 select.tournament.size = 2
 
-#END POPULATION SECTION
-
+#określa klasę problemu
 eval.problem = EGC.EdgeGraphColoringProblem
 
 breed.elites.0 = 1

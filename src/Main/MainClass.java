@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 
 package Main;
 
@@ -13,22 +8,16 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 
-/**
- *
- * @author arus2
- */
+
 public class MainClass {
-     /**
-     * @param args the command line arguments
-     * @throws java.io.FileNotFoundException
-     */
     
     public static void main(String[] args) throws FileNotFoundException, IOException {
-        // TODO code application logic here
         
+        //sciezka do pliku konfiguracyjnego
         String ParamsFile = "EGC.params";
 
-        //Delete last line in file
+        //Usuniecie ostatniej linii z pliku w ktorej jest dlugosc genomu z poprzedniego uzycia programu
+        //(na wypadek zmiany pliku z danymi)
         try (RandomAccessFile f = new RandomAccessFile(ParamsFile, "rw")) {
             long length = f.length() - 1;
             byte b;
@@ -40,13 +29,10 @@ public class MainClass {
             f.setLength(length+1);
         }
         
-        String ToAdd = "pop.subpop.0.species.genome-size    = ";
+        //wpis do pliku konfiguracyjnego odnoszacy sie do dlugosci genomu
+        String ToAdd = "pop.subpop.0.species.genome-size    = " + EdgeGraphColoringProblem.GetEdgesNumber();
         
-        ToAdd += EdgeGraphColoringProblem.GetEdgesNumber();
-        
-        System.out.println("ToAdd: " + ToAdd);
-        
-        //Adding to file
+        //Dodanie wpisu do pliku konfiguracyjnego
         try {
             FileWriter fw = new FileWriter(ParamsFile,true); //the true will append the new data
             fw.write(ToAdd + "\n");//appends the string to the file
@@ -56,7 +42,7 @@ public class MainClass {
             System.err.println("IOException: " + ioe.getMessage());
         }
 
-        //Run Algorithm
+        //Uruchomienie algorytmu
         String[] Params = {"-file",ParamsFile}; 
         Evolve.main(Params);
         

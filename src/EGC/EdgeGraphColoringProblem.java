@@ -1,14 +1,6 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package EGC;
 
-/**
- *
- * @author carlos
- */
 import ec.EvolutionState;
 import ec.Individual;
 import ec.Problem;
@@ -42,19 +34,13 @@ public class EdgeGraphColoringProblem extends Problem implements SimpleProblemFo
     //Pair = connected points 
     Map<Integer, Pair<Integer,Integer>> EdgesData;
     
-    //PoinstData index = point 
+    //PoinstData index = point number
     //list - connected edges to point
     Map<Integer, List<Integer>> PointsData;
     
     public final static String GetDataFilePath()
     {
         String DataFile = "Data.txt";
-        /*
-        File f = new File(DataFile);
-        if(!f.exists() || f.isDirectory()) { 
-            DataFile = "src" + File.separator + "EGC" + File.separator + DataFile;
-        }
-        */
         return DataFile;
     }
     
@@ -113,36 +99,25 @@ public class EdgeGraphColoringProblem extends Problem implements SimpleProblemFo
             Integer counter = 0;
 
             while ((text = reader.readLine()) != null) {
-                //text = text.replaceAll("\\s+","");
                 text = removeSpaces(text);
                 if(checkLine(text) == true) {
                     dataArray = text.split(" ");
-                    //System.out.println(Arrays.toString(dataArray));
                     if(dataArray.length == 1) {
-                        //System.out.println("Liczba krawędzi: " + text);
                         lineToReadCount = Integer.parseInt(text);
                     }   
                     else {
                         Integer edgeNumber = Integer.parseInt(dataArray[0]);
                         Integer sourceNumber = Integer.parseInt(dataArray[1]);
                         Integer destinationNumber = Integer.parseInt(dataArray[2]);
-                        //System.out.println("Numer kr: " + edgeNumber + " source: " + sourceNumber + " destination: " + destinationNumber);
-                       // System.out.println("EdgesData.put(" + edgeNumber + ", new Pair(" + sourceNumber + "," + destinationNumber + "))");
                         EdgesData.put(edgeNumber, new Pair(sourceNumber, destinationNumber));
-                       // System.out.println(PointsData.containsKey(0));
-                        //System.out.println(PointsData.containsKey(5));
                         if(!PointsData.containsKey(sourceNumber)) {
-                            //System.out.println("PointsData.put(" + sourceNumber + ", new ArrayList());");
                             PointsData.put(sourceNumber, new ArrayList());
                         }
                         if(!PointsData.containsKey(destinationNumber)) {
-                            //System.out.println("PointsData.put(" + destinationNumber + ", new ArrayList());");
                             PointsData.put(destinationNumber, new ArrayList());
                         }
                         PointsData.get(sourceNumber).add(edgeNumber);
                         PointsData.get(destinationNumber).add(edgeNumber);
-                        //System.out.println("PointsData.get(" + sourceNumber + ").add(" + edgeNumber + ")");
-                        //System.out.println("PointsData.get(" + destinationNumber + ").add(" + edgeNumber + ")");
                         counter++;
                         System.out.println(Arrays.toString(dataArray));
                         
@@ -165,12 +140,13 @@ public class EdgeGraphColoringProblem extends Problem implements SimpleProblemFo
     public void setup(EvolutionState state, Parameter base) {
         super.setup(state, base); //To change body of generated methods, choose Tools | Templates.
         
-        //reading from file
+        //Odczytanie danych z pliku
         loadData();
        
+        //Okreslenie ilosci krawedzi
         EDGES_NUMBER = EdgesData.size();
         
-        //oblicznie indexu chromatycznego - powinno byc 6 a nie 5 
+        //oblicznie indexu chromatycznego
         ArrayList<Integer> temp = new ArrayList<>();
         
         for (Map.Entry<Integer, Pair<Integer,Integer>> entry: EdgesData.entrySet()){
@@ -197,13 +173,13 @@ public class EdgeGraphColoringProblem extends Problem implements SimpleProblemFo
         
     }
     
-        //Check is it ideal
+    //Funkcja sprawdzajaca czy kolorowanie jest prawidlowe
     private boolean isIdeal(IntegerVectorIndividual vector){
         
         //sprawdzenie czy genome jest odpowiedniej długości
         if(vector.genome.length != EDGES_NUMBER) return false;
         
-        //sprawdzanie czy sie kolory nie powtarzaja przy danym wiercholku
+        //sprawdzanie czy kolory sie nie powtarzaja przy danym wiercholku
         List<Integer> temp = new ArrayList<>();        
         List<Integer> colors = new ArrayList<>();
         
@@ -241,9 +217,11 @@ public class EdgeGraphColoringProblem extends Problem implements SimpleProblemFo
         if (individual.evaluated)
             return;
         
+        //sprawdzenie czy uzywana jest odpowiednia pochodna klasa Individual
         if (!(individual instanceof IntegerVectorIndividual))
             evolutionState.output.fatal("It's not a IntegerVectorIndividual!!!",null);
 
+        //startowa ocena
         int fitnessValue = 0;
 
         IntegerVectorIndividual vector = (IntegerVectorIndividual) individual;
@@ -259,11 +237,12 @@ public class EdgeGraphColoringProblem extends Problem implements SimpleProblemFo
         
         if(all_unique_colors.size() > INDEX){
             fitnessValue -= all_unique_colors.size() - INDEX;
-        }else{
+        }
+        else{
             fitnessValue += 2;
         }
         
-        //Ocena
+        //Ocena rozwiazania
         for (Map.Entry<Integer, List<Integer>> entry: PointsData.entrySet()){
             List<Integer> edges = entry.getValue();
             List<Integer> used_colors = new ArrayList<>();
@@ -281,9 +260,10 @@ public class EdgeGraphColoringProblem extends Problem implements SimpleProblemFo
             }
         }
         
-        //Check is it ideal
+        //Sprawdzenie czy kolorowanie jest prawidlowe
         boolean isIdeal = isIdeal(vector);
         
+        //przekazanie oceny i zatrzymanie algorytmu jest isIdeal zwroci true
         SimpleFitness fitness  = (SimpleFitness) vector.fitness;
         fitness.setFitness(evolutionState, fitnessValue, isIdeal);
 

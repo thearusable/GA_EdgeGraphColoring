@@ -1,4 +1,6 @@
 Edge Graph Coloring Problem
 =============
 
-Projekt został wykonany przez: Arkadiusz Szczepkowicz @thearusable , Karolina Pawlus @carol77
+Autorzy projektu: 
+Arkadiusz Szczepkowicz (https://github.com/thearusable) 
+Karolina Pawlus (https://github.com/carol77)

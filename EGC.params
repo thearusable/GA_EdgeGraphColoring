@@ -48,7 +48,7 @@ pop.subpop.0.species.max-gene      = 15
 #minimalny Integer w genomie
 pop.subpop.0.species.min-gene      = 0
 
-#określa klasę reprezentującą genom
+#określa klasę reprezentującą osobnika
 pop.subpop.0.species.ind           = ec.vector.IntegerVectorIndividual
 pop.subpop.0.species.fitness       = ec.simple.SimpleFitness
 

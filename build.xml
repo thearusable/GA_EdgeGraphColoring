@@ -12,8 +12,17 @@
     <import file="nbproject/build-impl.xml"/>
 
 	<target name="-post-compile">
-    		<copy file="EGC.params" todir="${dist.dir}"/>
-		<copy file="Data.txt" todir="${dist.dir}"/>         
+    	<copy file="EGC.params" todir="${dist.dir}"/>
+		<copy file="Graph_25_10.txt" todir="${dist.dir}"/>      
+		<copy file="Graph_25_20.txt" todir="${dist.dir}"/>  
+		<copy file="Graph_25_30.txt" todir="${dist.dir}"/>  
+		<copy file="Graph_25_40.txt" todir="${dist.dir}"/>  
+		<copy file="Graph_25_50.txt" todir="${dist.dir}"/>  
+		<copy file="Graph_25_60.txt" todir="${dist.dir}"/>  
+		<copy file="Graph_25_70.txt" todir="${dist.dir}"/>  
+		<copy file="Graph_25_80.txt" todir="${dist.dir}"/>  
+		<copy file="Graph_25_90.txt" todir="${dist.dir}"/>
+		<copy file="Graph_25_100.txt" todir="${dist.dir}"/>		
 	</target>
 
     <!--

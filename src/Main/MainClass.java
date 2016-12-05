@@ -7,6 +7,11 @@ import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
+import java.time.Duration;
+import java.time.Instant;
+import java.util.concurrent.TimeUnit;
 
 
 public class MainClass {
@@ -41,10 +46,19 @@ public class MainClass {
         {
             System.err.println("IOException: " + ioe.getMessage());
         }
-
+        
+        long start = System.nanoTime();
         //Uruchomienie algorytmu
         String[] Params = {"-file",ParamsFile}; 
         Evolve.main(Params);
         
+        long end = System.nanoTime();
+        long time = end - start;
+
+        System.out.println(
+                String.format("%dm %ds %dms", 
+                        TimeUnit.NANOSECONDS.toMinutes(time),
+                        TimeUnit.NANOSECONDS.toSeconds(time) - TimeUnit.NANOSECONDS.toMinutes(time) * 60,
+                        TimeUnit.NANOSECONDS.toMillis(time) - TimeUnit.NANOSECONDS.toSeconds(time) * 1000));
     }
 }

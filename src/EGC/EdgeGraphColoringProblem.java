@@ -40,7 +40,27 @@ public class EdgeGraphColoringProblem extends Problem implements SimpleProblemFo
     
     public final static String GetDataFilePath()
     {
-        String DataFile = "Data.txt";
+        String DataFile;
+        // 38 - krawedzi
+        //DataFile = "Graph_25_10.txt";
+        // 52 - krawedzi
+        //DataFile = "Graph_25_20.txt";
+        // 99 - krawedzi
+        //DataFile = "Graph_25_30.txt";
+        // 118 - krawedzi
+        //DataFile = "Graph_25_40.txt";
+        // 146 - krawedzi
+        //DataFile = "Graph_25_50.txt";
+        // 179 - krawedzi
+        //DataFile = "Graph_25_60.txt";
+        // 215 - krawedzi
+        //DataFile = "Graph_25_70.txt";
+        // 239 - krawedzi
+        //DataFile = "Graph_25_80.txt";
+        // 274 - krawedzi
+        //DataFile = "Graph_25_90.txt";
+        // 300 - krawedzi
+        DataFile = "Graph_25_100.txt";
         return DataFile;
     }
     
@@ -166,6 +186,8 @@ public class EdgeGraphColoringProblem extends Problem implements SimpleProblemFo
                 max = 1;
             }
         }
+        
+        System.out.println("Indeks Chromatyczny: " + INDEX);
     }
 
     @Override
@@ -220,6 +242,7 @@ public class EdgeGraphColoringProblem extends Problem implements SimpleProblemFo
             //zlicza prawidłowo pokolorowane wierzchołki
             if(used_colors.size() == unique_colors.size()){
                 goodPoints += 1;
+                fitnessValue += 5;
             }
             
             //dodanie do oceny ilosc unikalnych kolorów

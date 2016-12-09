@@ -54,13 +54,13 @@ public class EdgeGraphColoringProblem extends Problem implements SimpleProblemFo
         // 179 - krawedzi
         //DataFile = "Graph_25_60.txt";
         // 215 - krawedzi
-        //DataFile = "Graph_25_70.txt";
+        DataFile = "Graph_25_70.txt";
         // 239 - krawedzi
         //DataFile = "Graph_25_80.txt";
         // 274 - krawedzi
         //DataFile = "Graph_25_90.txt";
         // 300 - krawedzi
-        DataFile = "Graph_25_100.txt";
+        //DataFile = "Graph_25_100.txt";
         return DataFile;
     }
     

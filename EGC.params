@@ -43,7 +43,7 @@ pop.subpop.0.duplicate-retries     = 0
 pop.subpop.0.species               = ec.vector.IntegerVectorSpecies
 
 #maksymalny Integer w genomie
-pop.subpop.0.species.max-gene      = 200
+pop.subpop.0.species.max-gene      = 1225
 
 #minimalny Integer w genomie
 pop.subpop.0.species.min-gene      = 0
@@ -57,7 +57,7 @@ pop.subpop.0.species.crossover-type = one
 
 #określa typ i częstotliwość mutacji
 pop.subpop.0.species.mutation-type  = reset
-pop.subpop.0.species.mutation-prob  = 0.05
+pop.subpop.0.species.mutation-prob  = 0.03
 
 pop.subpop.0.species.pipe           = ec.vector.breed.VectorMutationPipeline
 pop.subpop.0.species.pipe.source.0  = ec.vector.breed.VectorCrossoverPipeline
@@ -67,7 +67,7 @@ pop.subpop.0.species.pipe.source.0.source.0 = ec.select.TournamentSelection
 pop.subpop.0.species.pipe.source.0.source.1 = ec.select.TournamentSelection
 
 #określa ilość rywalizujących osobników
-select.tournament.size = 10
+select.tournament.size = 50
 
 #określa klasę problemu
 eval.problem = EGC.EdgeGraphColoringProblem
@@ -75,4 +75,4 @@ eval.problem = EGC.EdgeGraphColoringProblem
 breed.elites.0 = 1
 
 
-pop.subpop.0.species.genome-size    = 300
+pop.subpop.0.species.genome-size    = 1770

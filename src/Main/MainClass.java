@@ -47,13 +47,20 @@ public class MainClass {
             System.err.println("IOException: " + ioe.getMessage());
         }
         
-        long start = System.nanoTime();
-        //Uruchomienie algorytmu
-        String[] Params = {"-file",ParamsFile}; 
-        Evolve.main(Params);
         
-        long end = System.nanoTime();
-        long time = end - start;
+        long time = 0;
+        
+        for (int i = 0; i < 50; i++){
+            long start = System.nanoTime();
+            //Uruchomienie algorytmu
+            String[] Params = {"-file",ParamsFile}; 
+            Evolve.main(Params);
+            
+            long end = System.nanoTime();
+            time += end - start;
+        }
+
+        time /= 50;
 
         System.out.println(
                 String.format("%dm %ds %dms", 
